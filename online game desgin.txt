@@ -1,0 +1,37 @@
+server creates and maintains a list of fixed gameRooms at start.
+server then listens on a port.
+client and server uses mechanism like websockets for real time messaging (unlike http request-response)
+
+server decides the turn sequence of players when players are in READY STATE.
+server sends the turn and playerIDs to all players.
+server recieves the roll command from the player whose turn is, rolls the dice and brodcasts
+the result to other players in the room.
+
+Player can join in a room when a game round is in progress. 
+Player need to send roll dice command on his turn but within a time limit in every round.
+Player can leave a game when in progress. Other players need to be informed about it.
+Player needs to see the current players, their score, turns, his own score etc in every round.
+
+server recives packets/commands to roll the dice from players in a room.
+
+SERVER GAMEROOM can have the below states when a player joins.
+
+1. JOIN_STATE: when a new player joins, server allocate a room with less than 6 players or 
+   if cannot, then creates a new room and assigns it to the new player. The player can move to
+   READY_STATE OR WAIT_STATE.
+2. READY_STATE:if there are >=2 players in the room, and a round not started. then show dice/prompt and player-IDs to the players and the turn of the players. The results are send to 2 players.
+
+3. WAIT_STATE: if he is the only player in the room, wait for another to join to change to' 
+   READY_STATE
+4. GAME_STATE: if there are >=2 players, a round is in progress. Players have to respond in a certan time.A new player is shown the current playerIDs, turns,scores. The results of a roll are broadcasted to all players in the room.
+
+CLIENT can recieve following packets about game state and players in the room.
+
+1. when a player joins, he himself gets server state, game info(round,roundstarted,roundlength,scores),players in the room, his playerID.
+2. when a player joins, other players gets the info of new player- his playerID, turn.
+3. when a player leaves, other players gets the info of player who left- his playerID
+4. players also get gamestates when there is a change.
+6. When a new round starts, all players are informed 
+
+
+     
